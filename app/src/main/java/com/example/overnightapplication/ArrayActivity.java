@@ -5,48 +5,42 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayActivity extends Activity {
 
+    TextInputLayout textInputLayout;
+    AutoCompleteTextView autoCompleteTextView;
+    TextView showdong;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
 
-        List<String> category = new ArrayList<String>();
-        category.add("-동선택-");
-        category.add("A동");
-        category.add("B동");
-        category.add("103동");
-        category.add("104동");
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_dong);
+        textInputLayout = findViewById(R.id.inputLayout);
+        autoCompleteTextView = findViewById(R.id.dong);
+        showdong = findViewById(R.id.showdong);
 
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, category);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        String[] items = {"A동", "B동", "103동", "104동"};
+        ArrayAdapter<String> itemAdapter = new ArrayAdapter<>(ArrayActivity.this,
+                R.layout.item_list, items);
+        autoCompleteTextView.setAdapter(itemAdapter);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view,
-                                       int position, long id) {
-                Toast.makeText(getApplicationContext(), "Selected dong: "+
-                        category.get(position), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                showdong.setText((String) adapterView.getItemAtPosition(position));
 
             }
         });
-
-        spinner.setSelection(1);
-        // 스피너 선택 값 가져오는 방법
-        spinner.getSelectedItem().toString();
     }
 }
